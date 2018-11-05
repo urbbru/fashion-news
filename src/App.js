@@ -1,28 +1,46 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {Component} from 'react';
+import getNewsArticles from './getNewsArticles';
+import { DEFAULT_IMAGE } from './constants';
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
-}
+    constructor(props) {
+        super(props);
+        this.state = { newsArticles: [] };
+    }
 
+    async componentWillMount() {
+        const variables = {
+        keywords: ['hunkemoller']
+    };
+
+    const result = await getNewsArticles(variables);
+        this.setState({
+            newsArticles: result.fashionunitedNlNewsArticles,
+        });
+    }
+    
+    newsArticles() {
+        return this.state.newsArticles.map((newsArticle, index) =>
+            <div key={index}>
+                <h2>{newsArticle.title}</h2>
+
+                <img src={newsArticle.imageUrl || DEFAULT_IMAGE} />
+
+                <div>{newsArticle.description} <a href={newsArticle.url}>Read more</a></div>
+            </div>
+        )
+    }
+
+    render() {
+        return (
+            <div className="App">
+                <h1>Fashion News</h1>
+
+                <div>
+                    {this.newsArticles()}
+                </div>
+            </div>
+        );
+    }
+}
 export default App;
