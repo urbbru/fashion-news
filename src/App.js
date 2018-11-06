@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import getNewsArticles from './getNewsArticles';
 import { DEFAULT_IMAGE, dummyDesc } from './constants';
-import { Layout, Row, Col, Card } from 'antd';
+import { Layout, Row, Col, Card, Pagination } from 'antd';
 import { Link } from 'react-router-dom';
 const { Header, Footer, Content } = Layout;
 const { Meta } = Card;
@@ -14,21 +14,25 @@ class App extends Component {
 
     async componentWillMount() {
         const variables = {
-        keywords: ['hunkemoller']
-    };
+            keywords: ['hunkemoller']
+        };
 
-    const result = await getNewsArticles(variables);
+        const result = await getNewsArticles(variables);
+        
         this.setState({
             newsArticles: result.fashionunitedNlNewsArticles,
         });
     }
+
+    paginate = () => {}
     
     newsArticles() {
         return this.state.newsArticles.map((newsArticle, index) => {
             //replaces all spaces in title with dashes and turns all letters lowercase
             //ready to be placed in url
             const titleForUrl = newsArticle.title.replace(/ /g, '-').toLowerCase();
-            return (<Col className="gutter-row" xs={{ span: 24, offset: 0 }} sm={{ span: 12, offset:0 }}>
+            return (
+                    <Col className="gutter-row" xs={{ span: 24, offset: 0 }} sm={{ span: 12, offset:0 }}>
                         <Card
                             key={index}
                             style={{ minWidth: 200, marginTop:'10%'}}
@@ -41,7 +45,8 @@ class App extends Component {
                             description={dummyDesc}
                             />
                         </Card>
-                    </Col>)
+                    </Col>
+            )
         })
     }
 
@@ -55,10 +60,15 @@ class App extends Component {
                 <Content id="main">
                     <Row gutter={48}>
                         {this.newsArticles()}
+
+                        {/* Pagination total is from local state, divided by 2 because the plan is to show 2 per page*/}
+                        <Col xs={{ span: 22, offset: 1 }} className="pagination">
+                            <Pagination defaultCurrent={1} total={Math.ceil(this.state.newsArticles.length/2)*10}/>
+                        </Col>
                     </Row>
                 </Content>
 
-                <Footer>Footer</Footer>
+                <Footer>Fashion News 2018</Footer>
             </Layout>
         );
     }
