@@ -12,3 +12,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+#main {
+  padding: 2% 5%;
+}
+
+.articleImg {
+  min-height: 20px;
+}
+
+.title {
+  color:#fff;
+}

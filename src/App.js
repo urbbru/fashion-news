@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
 import getNewsArticles from './getNewsArticles';
-import { DEFAULT_IMAGE } from './constants';
+import { DEFAULT_IMAGE, dummyDesc } from './constants';
+import { Layout, Row, Col, Card } from 'antd';
+import { Link } from 'react-router-dom';
+const { Header, Footer, Content } = Layout;
+const { Meta } = Card;
 
 class App extends Component {
     constructor(props) {
@@ -20,26 +24,42 @@ class App extends Component {
     }
     
     newsArticles() {
-        return this.state.newsArticles.map((newsArticle, index) =>
-            <div key={index}>
-                <h2>{newsArticle.title}</h2>
-
-                <img src={newsArticle.imageUrl || DEFAULT_IMAGE} />
-
-                <div>{newsArticle.description} <a href={newsArticle.url}>Read more</a></div>
-            </div>
-        )
+        return this.state.newsArticles.map((newsArticle, index) => {
+            //replaces all spaces in title with dashes and turns all letters lowercase
+            //ready to be placed in url
+            const titleForUrl = newsArticle.title.replace(/ /g, '-').toLowerCase();
+            return (<Col className="gutter-row" xs={{ span: 24, offset: 0 }} sm={{ span: 12, offset:0 }}>
+                        <Card
+                            key={index}
+                            style={{ minWidth: 200, marginTop:'10%'}}
+                            cover={<img src={newsArticle.imageUrl || DEFAULT_IMAGE} class="articleImg"/>}
+                            hoverable
+                        >
+                            <Meta
+                            //no post ID or post description available, which is why index and dummy description is used
+                            title={<Link to={`/${titleForUrl}-${index}`}>{newsArticle.title}</Link>}
+                            description={dummyDesc}
+                            />
+                        </Card>
+                    </Col>)
+        })
     }
 
     render() {
         return (
-            <div className="App">
-                <h1>Fashion News</h1>
+            <Layout>
+                <Header>
+                    <h1 class="title">Fashion News</h1>
+                </Header>
 
-                <div>
-                    {this.newsArticles()}
-                </div>
-            </div>
+                <Content id="main">
+                    <Row gutter={48}>
+                        {this.newsArticles()}
+                    </Row>
+                </Content>
+
+                <Footer>Footer</Footer>
+            </Layout>
         );
     }
 }
