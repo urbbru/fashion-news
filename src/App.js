@@ -10,17 +10,20 @@ class App extends Component {
         return (
             <Layout>
                 <Header>
-                    <h1 class="title">Fashion News</h1>
+                    <h1 className="title">Fashion News</h1>
                 </Header>
 
                 <Content id="main">
-                    
                     <Row gutter={48}>
-                        <Route path="/" component={ArticlesContainer} />
+                        <Router>
+                            <Route path="/" component={ArticlesContainer} />
+                        </Router>
                     </Row>
                 </Content>
 
-                <Footer>Fashion News 2018</Footer>
+                <Footer>
+                    Fashion News 2018
+                </Footer>
             </Layout>
         );
     }

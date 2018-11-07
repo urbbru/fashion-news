@@ -63,7 +63,7 @@ class ArticlesContainer extends React.PureComponent {
                 width="95%"
                 footer={null}
             >
-                <img src={article.imageUrl} />
+                <img className="dialog-img" src={article.imageUrl || DEFAULT_IMAGE} />
                 <p>{dummyDesc}</p>
             </Modal>
         );
@@ -71,23 +71,23 @@ class ArticlesContainer extends React.PureComponent {
 
     NewsArticle = ({ match }) => {        
         let article = this.state.newsArticles.find((newsArticle, index) => {
-            let url = urlTheTitle(newsArticle.title) + "-" + index
+            const url = urlTheTitle(newsArticle.title) + "-" + index
             if(url === match.params.id) return newsArticle
-        });
-        if (!article) return null;    
+        })
+        if (!article) return null
         return (
             <div>
             <h1>{article.title}</h1>
             <img src={article.imageUrl} />
             </div>
-        );
-    };
+        )
+    }
     
     newsArticles(articles) {
         return articles.map((newsArticle, index) => {
             //replaces all spaces in title with dashes and turns all letters lowercase
             //ready to be placed in url
-            const titleForUrl = urlTheTitle(newsArticle.title);
+            const url = urlTheTitle(newsArticle.title) + "-" + index;
             return (
                     <Col className="gutter-row" xs={{ span: 24, offset: 0 }} sm={{ span: 12, offset:0 }}>
                         <Card
@@ -103,7 +103,7 @@ class ArticlesContainer extends React.PureComponent {
                                 <Link
                                     key={index}
                                     to={{
-                                    pathname: `/article/${titleForUrl}-${index}`,
+                                    pathname: `/article/${url}`,
                                     // this is the trick!
                                     state: { modal: true }
                                     }}
@@ -117,13 +117,13 @@ class ArticlesContainer extends React.PureComponent {
     }
 
     render() {
-        let { location } = this.props;
-
+        let { location } = this.props
+        
         let isModal = !!(
-        location.state &&
-        location.state.modal &&
-        this.previousLocation !== location
-        ); // not initial render
+            location.state &&
+            location.state.modal &&
+            this.previousLocation !== location
+        ) // not initial render
 
         if(this.state.newsArticles.length === 0) return (
             <div className="loader">
