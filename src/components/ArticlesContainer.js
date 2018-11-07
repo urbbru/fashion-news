@@ -89,11 +89,10 @@ class ArticlesContainer extends React.PureComponent {
             //ready to be placed in url
             const url = urlTheTitle(newsArticle.title) + "-" + index;
             return (
-                    <Col className="gutter-row" xs={{ span: 24, offset: 0 }} sm={{ span: 12, offset:0 }}>
+                    <Col key={index} className="gutter-row" xs={{ span: 24, offset: 0 }} sm={{ span: 12, offset:0 }}>
                         <Card
-                            key={index}
                             style={{ minWidth: 200, marginTop:'10%'}}
-                            cover={<img src={newsArticle.imageUrl || DEFAULT_IMAGE} class="articleImg"/>}
+                            cover={<img src={newsArticle.imageUrl || DEFAULT_IMAGE} className="articleImg"/>}
                             hoverable
                         >
                             <Meta
@@ -118,7 +117,7 @@ class ArticlesContainer extends React.PureComponent {
 
     render() {
         let { location } = this.props
-        
+
         let isModal = !!(
             location.state &&
             location.state.modal &&
