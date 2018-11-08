@@ -73,7 +73,7 @@ class ArticlesContainer extends React.PureComponent {
                 title={article.title}
                 visible={visible}
                 onCancel={close}
-                style={{top:0, margin:"3% auto"}}
+                style={{top:0, margin:"3% auto", paddingBottom: 0}}
                 width="95%"
                 footer={null}
             >
