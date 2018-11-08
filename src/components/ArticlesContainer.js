@@ -11,21 +11,32 @@ class ArticlesContainer extends React.PureComponent {
         super(props);
         this.state = { 
             newsArticles: [], 
-            visible: false, 
-            skip: 0, 
-            take: 2
+            totalArticles: [],
+            limit: 2,
+            offset: 0,
+            visible: false
         };
     }
 
     async componentWillMount() {
+        //get paginated articles
         const variables = {
+            keywords: ['hunkemoller'],
+            limit: this.state.limit,
+            offset: this.state.offset
+        };
+
+        //get total amount of articles
+        const varsForTotal = {
             keywords: ['hunkemoller']
         };
 
-        const result = await getNewsArticles(variables);
+        const paginated = await getNewsArticles(variables);
+        const total = await getNewsArticles(varsForTotal);
         
         this.setState({
-            newsArticles: result.fashionunitedNlNewsArticles,
+            newsArticles: paginated.fashionunitedNlNewsArticles,
+            totalArticles: total.fashionunitedNlNewsArticles,
         });
     }
 
@@ -45,7 +56,21 @@ class ArticlesContainer extends React.PureComponent {
     paginate = (page) => {
         // state controls the pagination, skip is the page number
         // -1 because array index starts at 0
-        this.setState({ ...this.state, skip: page-1 })
+        // anonymous callback function on updated state 
+        // to get the articles on current page
+        this.setState({ ...this.state, offset: (page-1) * 2 }, async () => {
+            const variables = {
+                keywords: ['hunkemoller'],
+                limit: this.state.limit,
+                offset: this.state.offset
+            };
+            
+            const paginated = await getNewsArticles(variables);
+            
+            this.setState({
+                newsArticles: paginated.fashionunitedNlNewsArticles
+            });
+        });
     }
 
     Dialog = ({ match, history }) => {
@@ -84,8 +109,9 @@ class ArticlesContainer extends React.PureComponent {
     }
 
     NewsArticle = ({ match }) => { 
+        console.log(this.state)
         // find the specific article and return it       
-        let article = this.state.newsArticles.find((newsArticle, index) => {
+        let article = this.state.totalArticles.find(newsArticle => {
             let url = urlTheTitle(newsArticle.title)
             // array index was used for id because there is no unique post id 
             // thats why .icludes() is used to match url to post
@@ -139,7 +165,7 @@ class ArticlesContainer extends React.PureComponent {
                                     <Col xs={{ span: 22, offset: 1 }} className="pagination">
                                         <Pagination 
                                             defaultCurrent={1} 
-                                            total={Math.ceil(this.state.newsArticles.length/2)*10}
+                                            total={Math.ceil(this.state.totalArticles.length/2)*10}
                                             onChange={this.paginate}
                                         />
                                     </Col>
