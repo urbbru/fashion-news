@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const { Meta } = Card;
 
 // this renders the news articles each in their own column for responsiveness
-// argument 1 takes the array of articles 
+// argument 1 takes the array of article objects
 // argument 2 takes how many articles per page for pagination
 // argument 3 takes the page currently on
 export function newsArticles(articles, take, skip) {
