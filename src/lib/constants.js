@@ -3,5 +3,3 @@ export const DEFAULT_IMAGE = 'https://fashionunited.info/global-assets/img/defau
 export const baseUrl = 'http://localhost:3000/';
 
 export const dummyDesc = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.';
-
-export function urlTheTitle(title) { return title.replace(/ /g, '-').toLowerCase(); }

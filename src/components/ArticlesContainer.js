@@ -1,10 +1,10 @@
 import * as React from 'react'
 import Articles from './Articles';
 import getNewsArticles from '../lib/getNewsArticles';
-import { DEFAULT_IMAGE, dummyDesc, urlTheTitle } from '../lib/constants';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { Col, Spin, Card, Modal, Pagination } from 'antd';
-const { Meta } = Card;
+import { urlTheTitle } from '../lib/utils';
+import { DEFAULT_IMAGE, dummyDesc } from '../lib/constants';
+import { Switch, Route } from "react-router-dom";
+import { Col, Spin, Modal, Pagination } from 'antd';
 
 class ArticlesContainer extends React.PureComponent {
     constructor(props) {
@@ -35,11 +35,10 @@ class ArticlesContainer extends React.PureComponent {
     componentWillUpdate(nextProps) {
         let { location } = this.props;
         // set previousLocation if props.location is not modal
-        if (
-        nextProps.history.action !== "POP" &&
-        (!location.state || !location.state.modal)
-        ) {
-        this.previousLocation = this.props.location;
+        if ( nextProps.history.action !== "POP" &&
+            (!location.state || !location.state.modal)) 
+        {
+            this.previousLocation = this.props.location;
         }
     }
 
@@ -87,52 +86,21 @@ class ArticlesContainer extends React.PureComponent {
     NewsArticle = ({ match }) => { 
         // find the specific article and return it       
         let article = this.state.newsArticles.find((newsArticle, index) => {
-            const url = urlTheTitle(newsArticle.title) + "-" + index
-            if(url === match.params.id) return newsArticle
+            let url = urlTheTitle(newsArticle.title)
+            // array index was used for id because there is no unique post id 
+            // thats why .icludes() is used to match url to post
+            if(match.params.id.includes(url)) {
+                if(!newsArticle.imageUrl) newsArticle.imageUrl = DEFAULT_IMAGE
+                return newsArticle
+            }
         })
         if (!article) return null
         return (
             <div>
                 <h1>{article.title}</h1>
-                <img src={article.imageUrl} />
+                <img className="dialog-img" src={article.imageUrl} />
             </div>
         )
-    }
-    
-    newsArticles(articles, take, skip) {
-        // get certain part of articles array to display on a page
-        const currentPage = articles.slice(skip * take, (skip + 1) * take);
-
-        //return that part of the array as a page
-        return currentPage.map((newsArticle, index) => {
-            // replaces all spaces in title with dashes and turns all letters lowercase
-            // ready to be placed in url
-            const url = urlTheTitle(newsArticle.title) + "-" + index;
-            return (
-                    <Col key={index} className="gutter-row" xs={{ span: 24, offset: 0 }} sm={{ span: 12, offset:0 }}>
-                        <Card
-                            style={{ minWidth: 200, marginTop:'10%'}}
-                            cover={<img src={newsArticle.imageUrl || DEFAULT_IMAGE} className="articleImg"/>}
-                            hoverable
-                        >
-                            <Meta
-                            // no post ID or post description available, which is why index and dummy description is used
-                            // <Link to={`/${titleForUrl}-${index}`}>
-                            title={
-                                <Link
-                                    key={index}
-                                    to={{
-                                    pathname: `/article/${url}`,
-                                    // this is the trick!
-                                    state: { modal: true }
-                                    }}
-                                >{newsArticle.title}</Link>}
-                            description={dummyDesc}
-                            />
-                        </Card>
-                    </Col>
-            )
-        })
     }
 
     render() {
