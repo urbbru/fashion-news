@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import ArticlesContainer from './components/ArticlesContainer';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { Layout, Row, Col, Spin, Card, Pagination } from 'antd';
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Layout, Row } from 'antd';
 const { Header, Footer, Content } = Layout;
-const { Meta } = Card;
 
 class App extends Component {
     render() {
