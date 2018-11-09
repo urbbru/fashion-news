@@ -155,10 +155,7 @@ class ArticlesContainer extends React.PureComponent {
                                 return (
                                     <div>
                                     <Articles 
-                                        articles={this.state.newsArticles} 
-                                        showArticles={this.newsArticles} 
-                                        skip={this.state.skip}
-                                        take={this.state.take}
+                                        articles={this.state.newsArticles}
                                     />
                                     {/* Pagination total is from local state
                                     divided by 2 because the plan is to show 2 per page*/}
