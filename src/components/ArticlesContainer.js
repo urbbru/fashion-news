@@ -109,7 +109,6 @@ class ArticlesContainer extends React.PureComponent {
     }
 
     NewsArticle = ({ match }) => { 
-        console.log(this.state)
         // find the specific article and return it       
         let article = this.state.totalArticles.find(newsArticle => {
             let url = urlTheTitle(newsArticle.title)
