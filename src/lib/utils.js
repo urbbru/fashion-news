@@ -5,12 +5,8 @@ import { Link } from "react-router-dom";
 const { Meta } = Card;
 
 // this renders the news articles each in their own column for responsiveness
-// arg 'articles' takes the array of article objects
-// arg 'take' takes how many articles per page for pagination
-// arg 'skip' takes the page currently on
 export function newsArticles(articles) {
-
-    //return that part of the array as a page
+    
     return articles.map((newsArticle, index) => {
         // replaces all spaces in title with dashes & turns all letters lowercase
         // ready to be placed in url
